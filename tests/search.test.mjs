@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {search,canonical,suggest} from '../public/search.js';
+test('Korean prices, ranges, exclusions and spacing',()=>{for(const [q,n]of [['50,000원 이하 셔츠',2],['3만원 이상 5만원 이하',4],['셔츠 추천해 줘',3],['겨울 울 니트',1],['흰색 제외 셔츠',0],['3~5만원',4],['5만원 미만',5],['5만원 초과',4],['없는상품',0]])assert.equal(search(q).items.length,n,q)});
+test('filter precedence and removal remain consistent with outbound search',()=>{assert.equal(canonical('흰색 셔츠',{color:'블랙'}),'셔츠 블랙');assert.equal(search('5만원 이하 셔츠',{max:null}).items.length,3);assert.equal(search('셔츠',{category:null}).items.length,9);assert.ok(suggest('셔').length);assert.equal(search('',{},'low').items[0].price,29000)});
