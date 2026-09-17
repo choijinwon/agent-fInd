@@ -5,3 +5,4 @@ node_modules/
 dist/
 .openai/
 .sites-runtime/
+worker-dist/

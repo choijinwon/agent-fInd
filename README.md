@@ -1,8 +1,8 @@
-# FIND / WEAR
+# FIND / WEAR — React
 한국어 의류 검색 데모. 상품 기반 자동완성, 가격 범위·제외 조건, 상세 보기, 최대 3개 비교, 기기 내 찜과 최근 검색을 지원합니다.
 
 ## GitHub Pages
-Settings → Pages → Build and deployment → Source를 **GitHub Actions**로 설정합니다. main에 푸시하면 테스트 후 public 디렉터리를 배포합니다. 최초 설정 후 Actions → Deploy GitHub Pages → Run workflow를 실행할 수 있습니다.
+Settings → Pages → Build and deployment → Source를 **GitHub Actions**로 설정합니다. main에 푸시하면 테스트 후 Vite의 dist 디렉터리를 배포합니다. 최초 설정 후 Actions → Deploy GitHub Pages → Run workflow를 실행할 수 있습니다.
 예상 주소: https://choijinwon.github.io/agent-fInd/ (배포 완료 전에는 사용할 수 없습니다.)
 
 ## SEO
@@ -11,13 +11,13 @@ Settings → Pages → Build and deployment → Source를 **GitHub Actions**로 
 배포 후 Google Search Console과 네이버 서치어드바이저에서 소유권 확인 및 사이트맵 제출이 필요할 수 있습니다. 계정별 확인 토큰은 임의로 생성하지 않았습니다. 검색 노출과 순위는 보장되지 않습니다.
 
 ## 개발
-`python3 -m http.server 8000 --directory public`로 정적 화면을 실행합니다.
-`npm run build && npm test`로 Worker를 생성하고 테스트합니다. 외부 패키지 설치는 필요 없습니다.
+`npm ci` 후 `npm run dev`로 React 개발 서버를 실행합니다.
+`npm run build`는 Pages 정적 빌드, `npm run build:worker && npm test`는 서버 빌드와 검색/API 테스트입니다. React + React DOM + Vite를 사용합니다.
 
 ## 상품 API
 GitHub Pages는 서버를 실행하지 않으므로 샘플 검색과 외부 쇼핑몰 검색을 지원합니다. 실상품 버튼은 별도 API 서버 연결 전 비활성화됩니다.
-server/worker.js는 Cloudflare Workers 호환 코드이며 dist/server/index.js로 빌드됩니다. 서버 비밀 설정에 NAVER_CLIENT_ID, NAVER_CLIENT_SECRET을 등록하세요. 실제 값은 저장소에 포함하지 않았습니다.
-외부 서버를 연결하려면 public/config.js의 API_BASE에 서버 origin을 설정하고 서버에서 이 Pages origin에 대한 CORS, 인증 및 요청 제한을 설정해야 합니다. 기존 소유자 전용 Sites 서버는 공개 API로 자동 연결되지 않습니다.
+server/worker.js는 Cloudflare Workers 호환 코드이며 worker-dist/index.js로 빌드됩니다. 서버 비밀 설정에 NAVER_CLIENT_ID, NAVER_CLIENT_SECRET을 등록하세요. 실제 값은 저장소에 포함하지 않았습니다.
+외부 서버를 연결하려면 빌드 환경변수 VITE_API_BASE에 서버 origin을 설정하고 서버에서 이 Pages origin에 대한 CORS, 인증 및 요청 제한을 설정해야 합니다. 기존 소유자 전용 Sites 서버는 공개 API로 자동 연결되지 않습니다.
 네이버는 최대 30개 결과를 반환하며 동일 상품 ID를 제거합니다. 배송비·쿠폰·옵션 가격·전체 최저가를 보장하지 않습니다. 쿠팡 상품 API와 LLM은 미연결입니다.
 공식 문서: https://developers.naver.com/docs/serviceapi/search/shopping/shopping.md
 
